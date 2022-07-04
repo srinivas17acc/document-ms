@@ -26,6 +26,28 @@ function deserialize_documents_DocumentResult(buffer_arg) {
   return documents_pb.DocumentResult.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_documents_FolderAddReq(arg) {
+  if (!(arg instanceof documents_pb.FolderAddReq)) {
+    throw new Error('Expected argument of type documents.FolderAddReq');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_documents_FolderAddReq(buffer_arg) {
+  return documents_pb.FolderAddReq.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_documents_FolderAddResp(arg) {
+  if (!(arg instanceof documents_pb.FolderAddResp)) {
+    throw new Error('Expected argument of type documents.FolderAddResp');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_documents_FolderAddResp(buffer_arg) {
+  return documents_pb.FolderAddResp.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var DocumentsServiceService = exports.DocumentsServiceService = {
   createDocument: {
@@ -38,6 +60,17 @@ var DocumentsServiceService = exports.DocumentsServiceService = {
     requestDeserialize: deserialize_documents_Document,
     responseSerialize: serialize_documents_DocumentResult,
     responseDeserialize: deserialize_documents_DocumentResult,
+  },
+  addFolder: {
+    path: '/documents.DocumentsService/AddFolder',
+    requestStream: false,
+    responseStream: false,
+    requestType: documents_pb.FolderAddReq,
+    responseType: documents_pb.FolderAddResp,
+    requestSerialize: serialize_documents_FolderAddReq,
+    requestDeserialize: deserialize_documents_FolderAddReq,
+    responseSerialize: serialize_documents_FolderAddResp,
+    responseDeserialize: deserialize_documents_FolderAddResp,
   },
 };
 

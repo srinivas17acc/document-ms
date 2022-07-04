@@ -14,6 +14,16 @@ message DocumentResult {
     string result = 1;
 }
 
+message FolderAddReq {
+    string name = 1;
+    string userid = 2;
+}
+
+message FolderAddResp {
+    string result = 1;
+}
+
 service DocumentsService {
     rpc CreateDocument(Document) returns (DocumentResult); 
+    rpc AddFolder(FolderAddReq) returns (FolderAddResp);
 }
