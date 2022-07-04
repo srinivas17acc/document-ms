@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package documents;
+
+
+message Document {
+    string userid = 1;
+    string name = 2;
+    string content = 3;
+    string folderid = 4;
+}
+
+message DocumentResult {
+    string result = 1;
+}
+
+service DocumentsService {
+    rpc CreateDocument(Document) returns (DocumentResult); 
+}
