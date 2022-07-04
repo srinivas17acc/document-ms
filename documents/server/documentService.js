@@ -1,4 +1,4 @@
-const {DocumentResult, FolderAddResp, FoldersReadResp, Folder} = require('../proto/documents_pb');
+const {DocumentResult, FolderAddResp, FoldersReadResp, Folder, MoveFolderResp} = require('../proto/documents_pb');
 var mongoose = require('mongoose');
 const DocumentCollection  = require('../model/document');
 const FolderCollection  = require('../model/folder');
@@ -27,7 +27,7 @@ exports.createDocument = (call, callback) => {
 
 
 exports.addFolder = (call, callback) => {
-	console.log(call.request.getUserid(), 'test request');
+	console.log(call.request.getUserid(), 'userId');
     
 	if (!call.request.getUserid()) {
 			call(null, null);
@@ -51,7 +51,7 @@ exports.addFolder = (call, callback) => {
 
 
 exports.readFolders = (call, callback) => {
-	console.log(call.request.getUserid(), 'test request');
+	console.log(call.request.getUserid(), 'userId');
     
 	if (!call.request.getUserid()) {
 			call(null, null);
@@ -78,4 +78,47 @@ exports.readFolders = (call, callback) => {
 		
 	  }
 	
+}
+
+
+exports.moveFolder = (call, callback) => {
+	console.log(call.request.getUserid(), 'userId');
+    
+	if (!call.request.getUserid()) {
+			call(null, null);
+	  } else {
+
+		let promise = new Promise(function(resolve, reject) {
+
+				 FolderCollection.find({ _id: call.request.getId(), userid:call.request.getUserid() }, function (err, folder) {
+						if (err){
+							console.log(err);
+							reject(folder);
+						}
+							resolve(folder);
+					});
+					
+		})
+		
+		promise.then(function(result) {
+
+               if (!result) {
+				callback(null, null);
+				return result;
+			   }
+
+				DocumentCollection.updateOne( {_id:call.request.getId()}, {folderid: call.request.getFolderid()} , function (err, folder) {
+					if (err){
+						console.log(err);
+					}
+					else{		
+						const folderMoveResp = new MoveFolderResp();
+						folderMoveResp.setResult('Moved successfully');
+						callback(null, folderMoveResp);
+					}
+				});
+
+		});
+		
+	  }
 }
