@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pb:gen": "./scripts/gen.sh documents",
-    "d:server": "node documents/server/index.js",
-    "d:client": "node documents/client/index.js"
+    "d:server": "node documents/server/index.js"
   },
   "repository": {
     "type": "git",
