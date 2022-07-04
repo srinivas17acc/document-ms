@@ -1,4 +1,4 @@
-const {DocumentResult, FolderAddResp} = require('../proto/documents_pb');
+const {DocumentResult, FolderAddResp, FoldersReadResp, Folder} = require('../proto/documents_pb');
 var mongoose = require('mongoose');
 const DocumentCollection  = require('../model/document');
 const FolderCollection  = require('../model/folder');
@@ -44,6 +44,37 @@ exports.addFolder = (call, callback) => {
 				callback(null, result);
 			}
 		})
+		
+	  }
+	
+}
+
+
+exports.readFolders = (call, callback) => {
+	console.log(call.request.getUserid(), 'test request');
+    
+	if (!call.request.getUserid()) {
+			call(null, null);
+	  } else {
+		FolderCollection.find({ userid:call.request.getUserid() }, function (err, folder) {
+			if (err){
+				console.log(err);
+			}
+			else{
+				const folderReadResp = new FoldersReadResp();
+
+				folder.forEach( f => {
+					const folderRes = new Folder();
+					folderRes.setName(f.name);
+				    folderRes.setUserid(f.userid);
+					folderReadResp.addFolders(folderRes);
+					
+				})
+			
+				console.log(folderReadResp, 'test');
+				callback(null, folderReadResp);
+			}
+		});
 		
 	  }
 	
