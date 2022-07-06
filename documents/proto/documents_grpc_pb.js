@@ -15,17 +15,6 @@ function deserialize_documents_Document(buffer_arg) {
   return documents_pb.Document.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_documents_DocumentListResponse(arg) {
-  if (!(arg instanceof documents_pb.DocumentListResponse)) {
-    throw new Error('Expected argument of type documents.DocumentListResponse');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_documents_DocumentListResponse(buffer_arg) {
-  return documents_pb.DocumentListResponse.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 function serialize_documents_DocumentResult(arg) {
   if (!(arg instanceof documents_pb.DocumentResult)) {
     throw new Error('Expected argument of type documents.DocumentResult');
@@ -35,17 +24,6 @@ function serialize_documents_DocumentResult(arg) {
 
 function deserialize_documents_DocumentResult(buffer_arg) {
   return documents_pb.DocumentResult.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
-function serialize_documents_DocumentsGetByUserReq(arg) {
-  if (!(arg instanceof documents_pb.DocumentsGetByUserReq)) {
-    throw new Error('Expected argument of type documents.DocumentsGetByUserReq');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_documents_DocumentsGetByUserReq(buffer_arg) {
-  return documents_pb.DocumentsGetByUserReq.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_documents_FolderAddReq(arg) {
@@ -116,17 +94,6 @@ function deserialize_documents_MoveFolderResp(buffer_arg) {
 
 
 var DocumentsServiceService = exports.DocumentsServiceService = {
-  getDocuments: {
-    path: '/documents.DocumentsService/GetDocuments',
-    requestStream: false,
-    responseStream: false,
-    requestType: documents_pb.DocumentsGetByUserReq,
-    responseType: documents_pb.DocumentListResponse,
-    requestSerialize: serialize_documents_DocumentsGetByUserReq,
-    requestDeserialize: deserialize_documents_DocumentsGetByUserReq,
-    responseSerialize: serialize_documents_DocumentListResponse,
-    responseDeserialize: deserialize_documents_DocumentListResponse,
-  },
   createDocument: {
     path: '/documents.DocumentsService/CreateDocument',
     requestStream: false,
@@ -138,16 +105,16 @@ var DocumentsServiceService = exports.DocumentsServiceService = {
     responseSerialize: serialize_documents_DocumentResult,
     responseDeserialize: deserialize_documents_DocumentResult,
   },
-  readDocument: {
-    path: '/documents.DocumentsService/ReadDocument',
+  addFolder: {
+    path: '/documents.DocumentsService/AddFolder',
     requestStream: false,
     responseStream: false,
-    requestType: documents_pb.DocumentsGetByUserReq,
-    responseType: documents_pb.Document,
-    requestSerialize: serialize_documents_DocumentsGetByUserReq,
-    requestDeserialize: deserialize_documents_DocumentsGetByUserReq,
-    responseSerialize: serialize_documents_Document,
-    responseDeserialize: deserialize_documents_Document,
+    requestType: documents_pb.FolderAddReq,
+    responseType: documents_pb.FolderAddResp,
+    requestSerialize: serialize_documents_FolderAddReq,
+    requestDeserialize: deserialize_documents_FolderAddReq,
+    responseSerialize: serialize_documents_FolderAddResp,
+    responseDeserialize: deserialize_documents_FolderAddResp,
   },
   readFolders: {
     path: '/documents.DocumentsService/ReadFolders',
@@ -159,17 +126,6 @@ var DocumentsServiceService = exports.DocumentsServiceService = {
     requestDeserialize: deserialize_documents_FoldersReadReq,
     responseSerialize: serialize_documents_FoldersReadResp,
     responseDeserialize: deserialize_documents_FoldersReadResp,
-  },
-  addFolder: {
-    path: '/documents.DocumentsService/AddFolder',
-    requestStream: false,
-    responseStream: false,
-    requestType: documents_pb.FolderAddReq,
-    responseType: documents_pb.FolderAddResp,
-    requestSerialize: serialize_documents_FolderAddReq,
-    requestDeserialize: deserialize_documents_FolderAddReq,
-    responseSerialize: serialize_documents_FolderAddResp,
-    responseDeserialize: deserialize_documents_FolderAddResp,
   },
   moveFolder: {
     path: '/documents.DocumentsService/MoveFolder',

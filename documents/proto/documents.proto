@@ -36,8 +36,19 @@ message FoldersReadResp {
     repeated Folder Folders = 1;
 }
 
+message MoveFolderReq {
+    string id = 1;
+    string folderid = 2;
+    string userid = 3;
+}
+
+message MoveFolderResp {
+    string result = 1;
+}
+
 service DocumentsService {
     rpc CreateDocument(Document) returns (DocumentResult); 
     rpc AddFolder(FolderAddReq) returns (FolderAddResp);
     rpc ReadFolders(FoldersReadReq) returns (FoldersReadResp);
+    rpc MoveFolder(MoveFolderReq) returns (MoveFolderResp); 
 }
