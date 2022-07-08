@@ -15,12 +15,13 @@ var docSchema = new mongoose.Schema({
     default: Date.now 
   },
   folderid: {
-    type: String
+    type: mongoose.Schema.Types.ObjectId // ObjectId 
   },
   userid: {
     type: String,
     
   }
 });
-
+docSchema.index({userid: 1})
 module.exports = mongoose.model('DocumentCollection', docSchema);
+

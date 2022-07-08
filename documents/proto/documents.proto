@@ -47,7 +47,7 @@ message MoveFolderResp {
 }
 
 service DocumentsService {
-    rpc CreateDocument(Document) returns (DocumentResult); 
+    rpc CreateDocument(Document) returns (DocumentResult); //stream
     rpc AddFolder(FolderAddReq) returns (FolderAddResp);
     rpc ReadFolders(FoldersReadReq) returns (FoldersReadResp);
     rpc MoveFolder(MoveFolderReq) returns (MoveFolderResp); 

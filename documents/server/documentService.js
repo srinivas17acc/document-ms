@@ -4,6 +4,7 @@ const DocumentCollection  = require('../model/document');
 const FolderCollection  = require('../model/folder');
 
 exports.createDocument = (call, callback) => {
+	const result = new DocumentResult();
 
 	if (!call.request.getUserid()) {
 			call(null, null);
@@ -11,17 +12,19 @@ exports.createDocument = (call, callback) => {
 		var createDocs = new DocumentCollection({name: call.request.getName(), content: call.request.getContent(), folderid: call.request.getFolderid(), userid:call.request.getUserid() });
 		createDocs.save(function(err,res){
 			if (err){
-				console.log(err);
+				if (err.code === 11000) {
+					err.details = "duplicate document"
+				}
+				callback(err,null);
 			}
 			else{
 				console.log(res);
-				const result = new DocumentResult();
 				result.setResult("document created successfully");
 				callback(null, result);
 			}
 		})
 		
-	  }
+	}
 	
 }
 
@@ -37,6 +40,7 @@ exports.addFolder = (call, callback) => {
 		createFolder.save(function(err,res){
 			if (err){
 				console.log(err);
+				callback(err,null);
 			}
 			else{
 				const result = new FolderAddResp();
@@ -59,6 +63,7 @@ exports.readFolders = (call, callback) => {
 		FolderCollection.find({ userid:call.request.getUserid() }, function (err, folder) {
 			if (err){
 				console.log(err);
+				callback(err,null);
 			}
 			else{
 				const folderReadResp = new FoldersReadResp();
@@ -81,35 +86,26 @@ exports.readFolders = (call, callback) => {
 }
 
 
-exports.moveFolder = (call, callback) => {
-	console.log(call.request.getUserid(), 'userId');
+exports.moveFolder = async (call, callback) => {
+	console.log(call.request.getUserid(), 'userId'); // movefolder validation
     
 	if (!call.request.getUserid()) {
 			call(null, null);
 	  } else {
 
-		let promise = new Promise(function(resolve, reject) {
+		 const exist = await FolderCollection.exists({ _id: call.request.getFolderid(), userid:call.request.getUserid()});
+		   
+		   const error = new Error("folder not found");
 
-				 FolderCollection.find({ _id: call.request.getId(), userid:call.request.getUserid() }, function (err, folder) {
-						if (err){
-							console.log(err);
-							reject(folder);
-						}
-							resolve(folder);
-					});
-					
-		})
-		
-		promise.then(function(result) {
-
-               if (!result) {
-				callback(null, null);
-				return result;
-			   }
-
+		     if (!exist) {
+                  callback(error, null);
+				  return;
+			 }
+	       
 				DocumentCollection.updateOne( {_id:call.request.getId()}, {folderid: call.request.getFolderid()} , function (err, folder) {
 					if (err){
 						console.log(err);
+						callback(err,null);
 					}
 					else{		
 						const folderMoveResp = new MoveFolderResp();
@@ -118,7 +114,6 @@ exports.moveFolder = (call, callback) => {
 					}
 				});
 
-		});
 		
 	  }
 }
